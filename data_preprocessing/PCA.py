@@ -28,7 +28,7 @@ class PCATest:
     def Standard(self, data):
         # axis=0 按列取均值
         mean_vector = np.mean(data, axis=0)
-        return mean_vector,data-mean_vector
+        return mean_vector, data - mean_vector
 
     # 计算协方差矩阵
     def getCovMatrix(self, newData):
