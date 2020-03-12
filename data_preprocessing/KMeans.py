@@ -38,7 +38,7 @@ class kMeans:
         print("最大异常值为：{}，最小异常值为：{}".format(upper_limit, lower_limit))
         # 过滤掉大于最大异常值和最小异常值的值
         newData = data[(data["price"] < upper_limit) & data["price"] > lower_limit]
-        return newData,upper_limit,lower_limit
+        return newData, upper_limit, lower_limit
 
     # 初始化聚类中心
     def initCenters(self, values, K, Cluster):
@@ -59,24 +59,24 @@ class kMeans:
         return np.emath.sqrt(pow(price1 - price2, 2))
 
     # 聚类
-    def kMeans(self,data,K,maxIters):
+    def kMeans(self, data, K, maxIters):
         # 最终聚类结果
         Cluster = dict()
-        oldCenters,Cluster  = self.initCenters(data,K,Cluster)
+        oldCenters, Cluster = self.initCenters(data, K, Cluster)
         print("初始的簇类中心为：{}".format(oldCenters))
-        #标志变量，若为True，则继续迭代
+        # 标志变量，若为True，则继续迭代
         clusterChanged = True
         # 记录迭代次数 最大迭代
-        i= 0
+        i = 0
         while clusterChanged:
             for price in data:
-                #每条数据与最近簇类中心的距离，初始化为正无穷大
+                # 每条数据与最近簇类中心的距离，初始化为正无穷大
                 minDistance = np.inf
                 # 每条数据对应的索引，初始化为-1
                 minIndex = -1
                 for key in Cluster.keys():
                     # 计算每条数据到簇类中心的距离
-                    dis = self.distance(price,Cluster[key]["center"])
+                    dis = self.distance(price, Cluster[key]["center"])
                     if dis < minDistance:
                         minDistance = dis
                         minIndex = key
@@ -87,21 +87,22 @@ class kMeans:
                 newCenter = np.mean(Cluster[key]["values"])
                 Cluster[key]["center"] = newCenter
                 newCenters.append(newCenter)
-            print("第{}次迭代后的簇类中心为：{}".format(i,newCenters))
-            if oldCenters == newCenters or i >maxIters:
+            print("第{}次迭代后的簇类中心为：{}".format(i, newCenters))
+            if oldCenters == newCenters or i > maxIters:
                 clusterChanged = False
             else:
                 oldCenters = newCenters
-                i+=1
-                #删除Cluster中记录的簇类值
+                i += 1
+                # 删除Cluster中记录的簇类值
                 for key in Cluster.keys():
                     Cluster[key]["values"] = []
         return Cluster
 
-if __name__ =="__main__":
+
+if __name__ == "__main__":
     file = "../data/sku-price/skuid_price.csv"
     km = kMeans()
     data = km.loadData(file)
-    newData,upper_limit,lower_limit = km.filterAnomalyValue(data)
-    Cluster = km.kMeans(newData["price"].values,K=7,maxIters=200)
+    newData, upper_limit, lower_limit = km.filterAnomalyValue(data)
+    Cluster = km.kMeans(newData["price"].values, K=7, maxIters=200)
     print(Cluster)
