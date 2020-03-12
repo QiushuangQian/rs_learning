@@ -130,8 +130,8 @@ class kMeans:
             clusterSSEResult[maxSSEKey]["sse"] = \
                 self.SSE(clusterSSEResult[0]["values"], clusterSSEResult[0]["center"])
 
-            maxKey = max(clusterSSEResult.keys())+1
-            clusterSSEResult.setdefault(maxKey,{})
+            maxKey = max(clusterSSEResult.keys()) + 1
+            clusterSSEResult.setdefault(maxKey, {})
             clusterSSEResult[maxKey]["center"] = clusterSSEResult[1]["center"]
             clusterSSEResult[maxSSEKey]["values"] = clusterSSEResult[1]["values"]
             clusterSSEResult[maxSSEKey]["sse"] = \
@@ -139,11 +139,12 @@ class kMeans:
 
         return clusterSSEResult
 
+
 if __name__ == "__main__":
     file = "../data/sku-price/skuid_price.csv"
     km = kMeans()
     data = km.loadData(file)
     newData, upper_limit, lower_limit = km.filterAnomalyValue(data)
     # Cluster = km.kMeans(newData["price"].values, K=7, maxIters=200)
-    clusterSSE = km.diKMeans(newData["price"].values,K=7)
+    clusterSSE = km.diKMeans(newData["price"].values, K=7)
     print(clusterSSE)
